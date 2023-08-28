@@ -1,45 +1,45 @@
+#include "lists.h"
+
 /**
- * insert_nodeint_at_index - function with 3 arguments
- * @head: pointer to head pointer of first node in linked list
- * @idx: index of list
- * @n: value integer
+ * insert_nodeint_at_index - Inserts a new node to a listint_t
+ *                           list at a given position.
+ * @head: A pointer to the address of the
+ *        head of the listint_t list.
+ * @idx: The index of the listint_t list where the new
+ *       node should be added - indices start at 0.
+ * @n: The integer for the new node to contain.
  *
- * Description: inserts a new node at a given position
- * Return: address of the new node
+ * Return: If the function fails - NULL.
+ *         Otherwise - the address of the new node.
  */
 listint_t *insert_nodeint_at_index(listint_t **head, unsigned int idx, int n)
 {
-	listint_t *temp, *cursor;
-	unsigned int count = 0;
+	listint_t *new, *copy = *head;
+	unsigned int node;
 
-	if (head == NULL)
+	new = malloc(sizeof(listint_t));
+	if (new == NULL)
 		return (NULL);
 
-	temp = malloc(sizeof(listint_t));
-	if (temp == NULL)
-		return (NULL);
-	temp->n = n;
-	cursor = *head;
+	new->n = n;
 
 	if (idx == 0)
 	{
-		temp->next = *head;
-		*head = temp;
-		return (*head);
+		new->next = copy;
+		*head = new;
+		return (new);
 	}
 
-	while (cursor != NULL)
+	for (node = 0; node < (idx - 1); node++)
 	{
-		if (count == idx - 1)
-		{
-			temp->next = cursor->next;
-			cursor->next = temp;
-		}
-		count++;
-		cursor = cursor->next;
-	}
-	if (idx > count)
-		return (NULL);
-	return (temp);
+		if (copy == NULL || copy->next == NULL)
+			return (NULL);
 
+		copy = copy->next;
+	}
+
+	new->next = copy->next;
+	copy->next = new;
+
+	return (new);
 }
